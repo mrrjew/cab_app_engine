@@ -1,26 +1,25 @@
-import { verifyJwt } from '../utils/token';
-import { findSessionById, signAccessToken, signRefreshToken } from '../utils/session';
+import { verifyJwt } from '../../../utils/token';
+import { findSessionById, signAccessToken, signRefreshToken } from '../../../utils/session';
 
-import IService, { IAppContext } from "../types/app";
+import IService, { IAppContext } from '../../../types/app';
 
-export default class UserSessionService extends IService{
-    constructor(props:IAppContext){
-        super(props)
-    }
-      // creates access tokens
-  async createUserSession(req,res) {
+export default class UserSessionService extends IService {
+  constructor(props: IAppContext) {
+    super(props);
+  }
+  // creates access tokens
+  async createUserSession(req, res) {
+    const id = req.body._id;
+    const user = await this.models.Rider.findById(id);
 
-    const id = req.body._id
-    const user = await this.models.User.findById(id);
-    
     if (!user) {
       throw new Error('Invalid id or password');
     }
 
     const accessToken = await signAccessToken(user);
-    
+
     const refreshToken = await signRefreshToken({ userId: user._id });
-    
+
     return res.status(201).json({
       accessToken,
       refreshToken,
@@ -28,7 +27,7 @@ export default class UserSessionService extends IService{
   }
 
   // refreshes access tokens
-  async refreshAccessToken(res,token) {
+  async refreshAccessToken(res, token) {
     const decoded = await verifyJwt<{ session: string }>(token);
 
     if (!decoded) {
@@ -41,7 +40,7 @@ export default class UserSessionService extends IService{
       throw new Error('Could not refresh access token');
     }
 
-    const user = await this.models.User.findById(String(session.userId));
+    const user = await this.models.Rider.findById(String(session.userId));
 
     if (!user) {
       throw new Error('Could not refresh access token');
@@ -51,5 +50,4 @@ export default class UserSessionService extends IService{
 
     return res.status(201).json({ accessToken });
   }
-
 }

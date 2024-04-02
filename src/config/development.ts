@@ -5,7 +5,7 @@ import { Config } from '.';
 const config: Config = {
   app: {
     name: 'cab-app',
-    port: 8080,
+    port: 1080,
     env: 'development',
     baseUrl: process.env.APP_URL
   },

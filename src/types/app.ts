@@ -13,9 +13,9 @@ export default class IService {
     this.context = context;
   }
 
-  async authenticate_driver(userId: any) {
-    const driver = await this.context.models.Driver.findOne({ _id: userId });
-
+  async authenticate_rider(userId: any) {
+    const driver = await this.context.models.Rider.findById(userId);
+    console.log(driver)
     if (!driver) {
       throw new Error('User not authenticated');
     }
@@ -23,14 +23,14 @@ export default class IService {
     return driver
   }
 
-  async authenticate_rider(userId: any) {
-    const driver = await this.context.models.Driver.findOne({ _id: userId });
+  async authenticate_ride(rideId: any) {
+    const ride = await this.context.models.Ride.findOne({ _id: rideId });
 
-    if (!driver) {
-      throw new Error('User not authenticated');
+    if (!ride) {
+      throw new Error('no ride found');
     }
 
-    return driver
+    return ride
   }
 
 }

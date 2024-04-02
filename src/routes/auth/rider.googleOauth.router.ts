@@ -2,7 +2,7 @@ import express from "express";
 import { google } from "googleapis";
 import config from "../../config";
 import { signJwt } from "../../utils/token";
-import User from "../../models/user/rider";
+import Rider from "../../models/user/rider";
 import axios from "axios";
 import { appContext } from "../../start";
 
@@ -51,7 +51,7 @@ router.get(`/google/callback`, async (req, res) => {
     const { email, verified_email, given_name, family_name, picture, locale } = googleUser;
     console.log(googleUser)
 
-    const user = await appContext.models.User.findOne({ email });
+    const user = await appContext.models.Rider.findOne({ email });
 
     let _user = {
       email,

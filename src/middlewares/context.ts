@@ -12,10 +12,9 @@ export default async function setContext (req:Request & {user:{_id:string}},res:
       const decoded: any = await verifyJwt(token);
       
       const id = decoded._id;
-      console.log(id,decoded)
       
       const user = { _id: id };
-      user ? req.user = user : null;
+      return req.user = user 
       next()
     }
   } catch (err) {

@@ -2,7 +2,7 @@ import { Document, Types } from "mongoose"
 
 export interface IRide {
     driver:Types.ObjectId
-    passenger:Types.ObjectId
+    rider:Types.ObjectId
     status:"PENDING" | "ONGOING" | "COMPLETED" | "CANCELLED"
     fare:string
     pickupLocation:{
@@ -20,7 +20,7 @@ export interface IRide {
 
 export interface IRideInput {
     driver:Types.ObjectId
-    passenger:Types.ObjectId
+    rider:Types.ObjectId
     status:string
     fare:string
     pickupLocation:{

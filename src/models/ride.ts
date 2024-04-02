@@ -2,7 +2,7 @@ import mongoose, { Schema } from "mongoose";
 
 const rideSchema = new mongoose.Schema({
     driver:{type: Schema.Types.ObjectId, required:true, ref: "User"},
-    passenger:{type: Schema.Types.ObjectId, required:true, ref: "User"},
+    rider:{type: Schema.Types.ObjectId, required:true, ref: "User"},
     status:{type:String, enum:["PENDING" , "ONGOING" , "COMPLETED" , "CANCELLED"], default:"PENDING"},
     fare:{type:String, required:true},
     pickupLocation:{
