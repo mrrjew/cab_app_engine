@@ -7,7 +7,7 @@ const config: Config = {
     name: 'cab-app',
     port: process.env.PORT || 8080,
     env: 'production',
-    baseUrl: process.env.APP_URL
+    baseUrl: process.env.APP_URL,
   },
   db: {
     uri: process.env.PROD_MONGO_URI || '',
@@ -23,14 +23,17 @@ const config: Config = {
     level: process.env.LOGGER_LEVEL,
   },
   paystack: {
-    secret_key: process.env.PAYSTACK_LIVE_SECRET_KEY || ''
+    secret_key: process.env.PAYSTACK_LIVE_SECRET_KEY || '',
   },
   oauth: {
     google: {
       clientId: process.env.GOOGLE_CLIENT_ID || '',
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || ''
-    }
-  }
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET || '',
+    },
+  },
+  maps: {
+    api_key: process.env.DISTANCE_MATRIX_API_KEY || '',
+  },
 };
 
 export default config;

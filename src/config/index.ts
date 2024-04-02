@@ -31,6 +31,9 @@ export interface Config {
       clientId:string;
       clientSecret:string;
     }
+  };
+  maps: {
+    api_key:string
   }
 }
 

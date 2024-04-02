@@ -155,6 +155,7 @@ export default class RiderService extends IService {
   // updates Rider details
   async updateRider(req, res) {
     try {
+      console.log(req.user._id)
       const Rider = await this.authenticate_rider(req.user._id);
 
       await Rider.updateOne({ $set: { ...req.body } });

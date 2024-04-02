@@ -15,9 +15,14 @@ import router from "../routes";
 import mongoose from "mongoose";
 import User from "../models/user/rider";
 import setContext from "../middlewares/context";
+import { createServer } from "http";
 
 export const appContext: IAppContext = {};
 export let app;
+
+
+// http server for websockets
+export const server = createServer(app)
 
 export default async function start(config: Config) {
   try {
@@ -26,6 +31,7 @@ export default async function start(config: Config) {
     // initialize models
     appContext.models = await initDb(config.db)
     appContext.services = await initServices(appContext)
+    
 
     // initialize app
     app = express();
