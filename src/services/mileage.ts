@@ -107,7 +107,6 @@ export default class MileageService extends IService {
     const ride = await this.authenticate_ride(rideId)
 
     if(
-        mileage.status == 'PENDING' ||
         mileage.status == 'REJECTED' ||
         mileage.status == 'EXHAUSTED'
     ){
@@ -115,16 +114,17 @@ export default class MileageService extends IService {
     }
 
     if(mileage.value == mileage.used){
+        mileage.status = 'EXHAUSTED'
         return res.status(500).send('mileage is finished')
   }
 
-    const _ride = await ride.updateOne({$set: {status:'COMPLETED'}})
-    await _ride.save();
+    await ride.updateOne({$set: {status:'COMPLETED'}})
+    await ride.save();
     
-    const _mileage = await mileage.updateOne({$set: {used: ride.mileage}})
-    await _mileage.save();
+    await mileage.updateOne({$set: {used: mileage.used + ride.mileage}})
+    await mileage.save();
 
-    return res.status(200).json([_ride,_mileage])
+    return res.status(200).json([ride,mileage])
   }
 
 }

@@ -6,13 +6,32 @@ class IService {
         this.models = context.models;
         this.context = context;
     }
-    authenticate_user(userId) {
+    authenticate_rider(userId) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
-            const user = yield this.context.models.User.findOne({ _id: userId });
-            if (!user) {
+            const driver = yield this.context.models.Rider.findById(userId);
+            console.log(driver);
+            if (!driver) {
                 throw new Error('User not authenticated');
             }
-            return user;
+            return driver;
+        });
+    }
+    authenticate_ride(rideId) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const ride = yield this.context.models.Ride.findOne({ _id: rideId });
+            if (!ride) {
+                throw new Error('no ride found');
+            }
+            return ride;
+        });
+    }
+    authenticate_mileage(riderId) {
+        return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const mileage = yield this.context.models.Mileage.findOne({ rider: riderId }).sort({ updatedAt: -1 });
+            if (!mileage) {
+                throw new Error('no mileage found');
+            }
+            return mileage;
         });
     }
 }
