@@ -11,10 +11,11 @@ const { oauth: { google: { clientId, clientSecret } }, app: { baseUrl } } = conf
 const router = express.Router();
 
 const redirectURI = `${baseUrl}/auth/google/callback`; // Ensure to use absolute URL
+console.log(redirectURI)
 
 const oauth2Client = new google.auth.OAuth2(
-  clientId.trim(),
-  clientSecret.trim(),
+  clientId,
+  clientSecret,
   redirectURI
 );
 

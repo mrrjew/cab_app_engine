@@ -10,7 +10,8 @@ const start_1 = require("../../start");
 const { oauth: { google: { clientId, clientSecret } }, app: { baseUrl } } = config_1.default;
 const router = express_1.default.Router();
 const redirectURI = `${baseUrl}/auth/google/callback`; // Ensure to use absolute URL
-const oauth2Client = new googleapis_1.google.auth.OAuth2(clientId.trim(), clientSecret.trim(), redirectURI);
+console.log(redirectURI);
+const oauth2Client = new googleapis_1.google.auth.OAuth2(clientId, clientSecret, redirectURI);
 const scopes = [
     "https://www.googleapis.com/auth/userinfo.profile",
     "https://www.googleapis.com/auth/userinfo.email",
@@ -38,7 +39,7 @@ router.get(`/google/callback`, (req, res) => tslib_1.__awaiter(void 0, void 0, v
         const { data: googleUser } = yield oauth2.userinfo.get();
         const { email, verified_email, given_name, family_name, picture, locale } = googleUser;
         console.log(googleUser);
-        const user = yield start_1.appContext.models.User.findOne({ email });
+        const user = yield start_1.appContext.models.Rider.findOne({ email });
         let _user = {
             email,
             // phoneNumber:phoneNumber,
@@ -56,12 +57,7 @@ router.get(`/google/callback`, (req, res) => tslib_1.__awaiter(void 0, void 0, v
         else {
             token = yield (0, token_1.signJwt)(user);
         }
-        res.cookie('access-token', token, {
-            maxAge: 900000,
-            httpOnly: true,
-            secure: false,
-        });
-        return res.status(201).send('google oauth complete');
+        return res.status(201).json(token);
     }
     catch (error) {
         console.error("Error fetching user:", error);
@@ -69,4 +65,4 @@ router.get(`/google/callback`, (req, res) => tslib_1.__awaiter(void 0, void 0, v
     }
 }));
 exports.default = router;
-//# sourceMappingURL=googleOauth.router.js.map
+//# sourceMappingURL=rider.googleOauth.router.js.map
