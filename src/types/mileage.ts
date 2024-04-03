@@ -1,13 +1,12 @@
-import { Types } from "mongoose";
+import { Number, Types } from "mongoose";
 
 export interface IMileage{
     rider:Types.ObjectId
     transactionId?:string
     reference?:string
-    value:string
-    amount:string
-    used?:string
-    status:'PENDING' | 'CONFIRMED' | 'REJECTED' | 'EXHAUSTED'
+    value:number
+    used?:number
+    status:'PENDING' | 'CREDITED' | 'REJECTED' | 'EXHAUSTED'
 }
 
 export interface IMileageDocument extends IMileage,Document{

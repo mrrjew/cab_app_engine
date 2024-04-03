@@ -6,7 +6,7 @@ const rideSchema = new mongoose.Schema<IRideDocument>(
     driver: { type: Schema.Types.ObjectId, ref: 'Driver' },
     rider: { type: Schema.Types.ObjectId, required: true, ref: 'Rider' },
     status: { type: String, enum: ['PENDING', 'ONGOING', 'COMPLETED', 'CANCELLED'], default: 'PENDING' },
-    mileage: { type: String, required: true },
+    mileage: { type: Number, required: true },
     pickupLocation: {
       longitude: { type: String, required: true },
       latitude: { type: String, required: true },

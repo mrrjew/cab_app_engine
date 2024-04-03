@@ -27,8 +27,8 @@ export default class UserSessionService extends IService {
   }
 
   // refreshes access tokens
-  async refreshAccessToken(res, token) {
-    const decoded = await verifyJwt<{ session: string }>(token);
+  async refreshAccessToken(req, res) {
+    const decoded = await verifyJwt<{ session: string }>(req.body.token);
 
     if (!decoded) {
       throw new Error('Could not refresh access token');
@@ -46,7 +46,7 @@ export default class UserSessionService extends IService {
       throw new Error('Could not refresh access token');
     }
 
-    const accessToken = signAccessToken(user);
+    const accessToken = await signAccessToken(user);
 
     return res.status(201).json({ accessToken });
   }

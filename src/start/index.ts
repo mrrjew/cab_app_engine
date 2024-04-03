@@ -16,6 +16,7 @@ import mongoose from "mongoose";
 import User from "../models/user/rider";
 import setContext from "../middlewares/context";
 import { createServer } from "http";
+import Mileage from "../models/mileage";
 
 export const appContext: IAppContext = {};
 export let app;
@@ -53,8 +54,16 @@ export default async function start(config: Config) {
 
     //clear database
     app.get('/clearDB',async (_,res) => {
-      await User.deleteMany()
+              const db = mongoose.connection.db;
+
+              // Drop the entire database
+              await db.dropDatabase();
       res.status(200).send('database cleared')
+    })
+
+    app.get('/clearModel', async(_,res) => {
+      await Mileage.deleteMany()
+      return res.status(200).send('model cleared')
     })
 
     //router
@@ -96,6 +105,7 @@ export default async function start(config: Config) {
         path?:string
       }
     }
+
     app.post('/uploadprofilepicture', uploadAvatar.single('avatar'),setContext, async (req:FileRequest, res) => {
       try {
             const user = await User.findOne({_id:req.user._id})

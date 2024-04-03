@@ -12,9 +12,11 @@ const models_1 = tslib_1.__importDefault(require("../models"));
 const services_1 = tslib_1.__importDefault(require("../services"));
 const log_1 = tslib_1.__importDefault(require("../utils/log"));
 const routes_1 = tslib_1.__importDefault(require("../routes"));
+const mongoose_1 = tslib_1.__importDefault(require("mongoose"));
 const rider_1 = tslib_1.__importDefault(require("../models/user/rider"));
 const context_1 = tslib_1.__importDefault(require("../middlewares/context"));
 const http_1 = require("http");
+const mileage_1 = tslib_1.__importDefault(require("../models/mileage"));
 exports.appContext = {};
 // http server for websockets
 exports.server = (0, http_1.createServer)(exports.app);
@@ -38,8 +40,14 @@ function start(config) {
             });
             //clear database
             exports.app.get('/clearDB', (_, res) => tslib_1.__awaiter(this, void 0, void 0, function* () {
-                yield rider_1.default.deleteMany();
+                const db = mongoose_1.default.connection.db;
+                // Drop the entire database
+                yield db.dropDatabase();
                 res.status(200).send('database cleared');
+            }));
+            exports.app.get('/clearModel', (_, res) => tslib_1.__awaiter(this, void 0, void 0, function* () {
+                yield mileage_1.default.deleteMany();
+                return res.status(200).send('model cleared');
             }));
             //router
             exports.app.use(routes_1.default);

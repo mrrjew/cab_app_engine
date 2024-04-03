@@ -4,7 +4,7 @@ export interface IRide {
     driver?:Types.ObjectId
     rider:Types.ObjectId
     status:"PENDING" | "ONGOING" | "COMPLETED" | "CANCELLED"
-    mileage:string
+    mileage:number
     pickupLocation:{
         longitude:string
         latitude:string
