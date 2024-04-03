@@ -11,16 +11,19 @@ const riderSchema = new Schema<IUserDocument>(
     lastname: { type: String },
     othernames: { type: String },
     email: { type: String },
-    phoneNumber:{type:String,required:true},
+    phoneNumber: { type: String, required: true },
     password: { type: String },
-    verificationCode: { type: String, required: true, default: () => code.generate(4,{upperCaseAlphabets:false,specialChars:false,lowerCaseAlphabets:false}) },
+    verificationCode: {
+      type: String,
+      required: true,
+      default: () => code.generate(4, { upperCaseAlphabets: false, specialChars: false, lowerCaseAlphabets: false }),
+    },
     passwordResetCode: { type: String },
-    verified: { type: Boolean, required: true, default:false },
+    verified: { type: Boolean, required: true, default: false },
     profile: {
-      avatar:{ type: String}, 
-      basicInformation: { type: String},
-      ghanaCard: { type: String},
-     },
+      avatar: { type: String },
+      basicInformation: { type: String },
+    },
     settings: {
       // General Settings
       language: { type: String, enum: ['EN', 'FR', 'ES', 'DE', 'ZH', 'JA', 'KO'], default: 'EN' },
@@ -41,8 +44,8 @@ const riderSchema = new Schema<IUserDocument>(
       twoFactorAuthEnabled: { type: Boolean, default: false },
       dataEncryptionEnabled: { type: Boolean, default: false },
     },
-    latitude:{type: Number, required: false},
-    longitude:{type: Number, required: false},
+    latitude: { type: Number, required: false },
+    longitude: { type: Number, required: false }
   },
   {
     timestamps: true,

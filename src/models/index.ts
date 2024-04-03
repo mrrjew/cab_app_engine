@@ -6,11 +6,14 @@ import log from '../utils/log';
 import Rider from './user/rider';
 // ride
 import Ride from './ride';
+// mileage
+import Mileage from './mileage'
 
 
 export interface IModels {
   Rider: typeof Rider;
   Ride: typeof Ride;
+  Mileage: typeof Mileage;
 }
 
 export default async function initDB(config: Config['db']): Promise<IModels> {
@@ -20,10 +23,12 @@ export default async function initDB(config: Config['db']): Promise<IModels> {
 
     await Rider.createCollection();
     await Ride.createCollection();
+    await Mileage.createCollection();
 
     return {
       Rider,
-      Ride
+      Ride,
+      Mileage
     };
   } catch (e) {
     throw new Error(`Error while connecting to database : ${e}`);

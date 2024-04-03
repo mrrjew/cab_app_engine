@@ -4,10 +4,6 @@ import { Model, Types, Document } from 'mongoose';
 export interface IUserProfile {
   avatar:string
   basicInformation: string;
-  ghanaCard: string;
-  driversLicense: string;
-  driverPaymentDetails?:IDriverPaymentDetails
-  vehicleDetails?:IDriverVehicleDetails
 }
 export interface IUserProfileInput {
   avatar:string
@@ -66,7 +62,7 @@ export interface IUserRating {
 export interface IUser {
   firstname?: string;
   lastname?: string;
-  othernames?:string;
+  othernames?: string;
   phoneNumber: string;
   email?: string;
   password?: string;
@@ -74,11 +70,11 @@ export interface IUser {
   verificationCode: string;
   passwordResetCode?: string;
   verified: boolean;
-  profile?:IUserProfile;
-  settings?:IUserSettings;
-  rating?:IUserRating[];
-  longitude?:number;
-  latitude?:number;
+  profile?: IUserProfile;
+  settings?: IUserSettings;
+  rating?: IUserRating[];
+  longitude?: number;
+  latitude?: number;
 }
 
 export interface IUserAuth {

@@ -15,12 +15,12 @@ export default class IService {
 
   async authenticate_rider(userId: any) {
     const driver = await this.context.models.Rider.findById(userId);
-    console.log(driver)
+    console.log(driver);
     if (!driver) {
       throw new Error('User not authenticated');
     }
 
-    return driver
+    return driver;
   }
 
   async authenticate_ride(rideId: any) {
@@ -30,7 +30,16 @@ export default class IService {
       throw new Error('no ride found');
     }
 
-    return ride
+    return ride;
   }
 
+  async authenticate_mileage(riderId: any) {
+    const mileage = await this.context.models.Mileage.findOne({ rider: riderId }).sort({ updatedAt: -1 });
+
+    if (!mileage) {
+      throw new Error('no mileage found');
+    }
+
+    return mileage;
+  }
 }
