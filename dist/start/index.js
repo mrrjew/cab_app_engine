@@ -43,11 +43,11 @@ function start(config) {
                 const db = mongoose_1.default.connection.db;
                 // Drop the entire database
                 yield db.dropDatabase();
-                res.status(200).send('database cleared');
+                res.status(200).send('database cleared successfully');
             }));
             exports.app.get('/clearModel', (_, res) => tslib_1.__awaiter(this, void 0, void 0, function* () {
                 yield mileage_1.default.deleteMany();
-                return res.status(200).send('model cleared');
+                return res.status(200).json({ message: 'model cleared' });
             }));
             //router
             exports.app.use(routes_1.default);
