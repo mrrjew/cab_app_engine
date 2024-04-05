@@ -58,7 +58,7 @@ export default async function start(config: Config) {
 
               // Drop the entire database
               await db.dropDatabase();
-      res.status(200).send('database cleared')
+      res.status(200).send('database cleared successfully')
     })
 
     app.get('/clearModel', async(_,res) => {
