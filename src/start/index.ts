@@ -63,7 +63,7 @@ export default async function start(config: Config) {
 
     app.get('/clearModel', async(_,res) => {
       await Mileage.deleteMany()
-      return res.status(200).send('model cleared')
+      return res.status(200).json({message:'model cleared'})
     })
 
     //router
