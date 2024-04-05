@@ -30,7 +30,7 @@ export default class RideService extends IService {
       const distance = response.data.rows[0].elements[0].distance;
       const time = response.data.rows[0].elements[0].duration;
       console.log(`Distance from ${origin} to ${destination}: ${distance.text} in ${time.text}`);
-      return {distance,time};
+      return { distance, time };
     } catch (error) {
       console.error('Error fetching distance:', error);
       throw new Error('Error fetching distance');
@@ -63,8 +63,8 @@ export default class RideService extends IService {
     }
 
     try {
-       const origin = `${pickupLocation.latitude},${pickupLocation.longitude}`;
-       const dest = `${destination.latitude},${destination.longitude}`;
+      const origin = `${pickupLocation.latitude},${pickupLocation.longitude}`;
+      const dest = `${destination.latitude},${destination.longitude}`;
 
       const response = await this.calculateDistance(origin, dest);
 
@@ -114,29 +114,35 @@ export default class RideService extends IService {
   }
 
   async updateRide(req: any, res: any) {
+    const {rideId} = req.body
+    const ride = await this.authenticate_ride(rideId);
+    console.log(ride);
+
     try {
-      const ride = await this.authenticate_ride(req.params.id);
+      console.log(req.body)
+      const updatedRide = await ride.updateOne({ $set: { ...req.body } });
+      if (!updatedRide) {
+        return res.status(404).json({ error: 'Ride not found' });
+      }
 
-      await ride.updateOne({ $set: { ...req.body } }, { new: true, upsert: true });
-
-      await ride.save();
-      return res.status(200).send('Edited ride successfully');
+      return res.status(200).json({ message: 'Ride updated successfully', ride: updatedRide });
     } catch (error) {
       console.error('Error editing ride:', error);
-      return res.status(500).send(`Error editing ride: ${error}`);
+      return res.status(500).json({ error: `Error editing ride: ${error.message}` });
     }
   }
 
-  async deleteRide(req: any, res: any) {
+  async cancelRide(req: any, res: any) {
     try {
-      const ride = await this.authenticate_ride(req.params.id);
+      const {rideId} = req.body
+      const ride = await this.authenticate_ride(rideId);
 
-      await ride.deleteOne();
+      await ride.updateOne({$set: {status:"CANCELLED"}});
 
-      return res.status(200).send('Deleted ride successfully');
+      return res.status(200).send('Cancelled ride successfully');
     } catch (error) {
-      console.error('Error deleting ride:', error);
-      return res.status(500).send(`Error deleting ride: ${error}`);
+      console.error('Error cancelling ride:', error);
+      return res.status(500).send(`Error cancelling ride: ${error}`);
     }
   }
 }

@@ -64,7 +64,14 @@ riderSchema.pre('save', function (next) {
 });
 riderSchema.methods.validatePassword = function (pass) {
     return tslib_1.__awaiter(this, void 0, void 0, function* () {
-        return bcrypt_1.default.compare(pass, this.password);
+        try {
+            const _password = yield bcrypt_1.default.compare(pass, this.password);
+            console.log(pass, this.password, _password);
+            return _password;
+        }
+        catch (e) {
+            throw new Error(`error validating password: ${e}`);
+        }
     });
 };
 const Rider = (0, mongoose_1.model)('Driver', riderSchema);

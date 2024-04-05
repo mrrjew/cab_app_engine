@@ -65,7 +65,13 @@ riderSchema.pre('save', async function (next) {
 });
 
 riderSchema.methods.validatePassword = async function (pass: string) {
-  return bcrypt.compare(pass, this.password);
+  try {
+    const _password = await bcrypt.compare(pass, this.password);
+    console.log(pass,this.password,_password  )
+    return _password;
+  } catch (e) {
+    throw new Error(`error validating password: ${e}`);
+  }
 };
 
 const Rider = model('Driver', riderSchema);

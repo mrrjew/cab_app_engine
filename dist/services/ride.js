@@ -102,28 +102,34 @@ class RideService extends app_1.default {
     }
     updateRide(req, res) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const { rideId } = req.body;
+            const ride = yield this.authenticate_ride(rideId);
+            console.log(ride);
             try {
-                const ride = yield this.authenticate_ride(req.params.id);
-                yield ride.updateOne({ $set: Object.assign({}, req.body) }, { new: true, upsert: true });
-                yield ride.save();
-                return res.status(200).send('Edited ride successfully');
+                console.log(req.body);
+                const updatedRide = yield ride.updateOne({ $set: Object.assign({}, req.body) });
+                if (!updatedRide) {
+                    return res.status(404).json({ error: 'Ride not found' });
+                }
+                return res.status(200).json({ message: 'Ride updated successfully', ride: updatedRide });
             }
             catch (error) {
                 console.error('Error editing ride:', error);
-                return res.status(500).send(`Error editing ride: ${error}`);
+                return res.status(500).json({ error: `Error editing ride: ${error.message}` });
             }
         });
     }
-    deleteRide(req, res) {
+    cancelRide(req, res) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             try {
-                const ride = yield this.authenticate_ride(req.params.id);
-                yield ride.deleteOne();
-                return res.status(200).send('Deleted ride successfully');
+                const { rideId } = req.body;
+                const ride = yield this.authenticate_ride(rideId);
+                yield ride.updateOne({ $set: { status: "CANCELLED" } });
+                return res.status(200).send('Cancelled ride successfully');
             }
             catch (error) {
-                console.error('Error deleting ride:', error);
-                return res.status(500).send(`Error deleting ride: ${error}`);
+                console.error('Error cancelling ride:', error);
+                return res.status(500).send(`Error cancelling ride: ${error}`);
             }
         });
     }

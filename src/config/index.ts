@@ -7,7 +7,7 @@ export interface Config {
     name: string;
     env: 'production' | 'development' | 'test';
     port: string | number;
-    baseUrl: string
+    baseUrl: string;
   };
 
   db: {
@@ -24,17 +24,22 @@ export interface Config {
     level: string;
   };
   paystack: {
-    secret_key:string
+    secret_key: string;
+    subaccount: {
+      account_number: string;
+      bank_code: string;
+      code: string;
+    };
   };
   oauth: {
     google: {
-      clientId:string;
-      clientSecret:string;
-    }
+      clientId: string;
+      clientSecret: string;
+    };
   };
   maps: {
-    api_key:string
-  }
+    api_key: string;
+  };
 }
 
 const config = process.env.NODE_ENV === 'development' ? development : production;

@@ -11,19 +11,34 @@ router.get('/rider-ride-history', context_1.default, function (req, res) {
         return res.status(200).json(rides);
     });
 });
+router.get('/current-ride', context_1.default, function (req, res) {
+    return tslib_1.__awaiter(this, void 0, void 0, function* () {
+        try {
+            const rides = yield start_1.appContext.models.Ride.find({ rider: req.user._id });
+            //   const ride = await appContext.models.Ride.findOne({
+            //   $and: [{ riderId: req.user._id }, { $or: [{ status: 'PENDING' }, { status: 'ONGOING' }] }],
+            // });
+            const ride = [...rides].reverse()[0];
+            return res.status(200).json(ride);
+        }
+        catch (e) {
+            return res.status(500).json({ error: `error getting current ride: ${e}` });
+        }
+    });
+});
 router.post('/ride-request', context_1.default, function (req, res) {
     return tslib_1.__awaiter(this, void 0, void 0, function* () {
         yield start_1.appContext.services.RideService.requestRide(req, res);
     });
 });
-router.post('/update-ride/:id', context_1.default, function (req, res) {
+router.put('/update-ride', context_1.default, function (req, res) {
     return tslib_1.__awaiter(this, void 0, void 0, function* () {
         yield start_1.appContext.services.RideService.updateRide(req, res);
     });
 });
-router.post('/delete-ride/:id', context_1.default, function (req, res) {
+router.put('/cancel-ride', context_1.default, function (req, res) {
     return tslib_1.__awaiter(this, void 0, void 0, function* () {
-        yield start_1.appContext.services.RideService.deleteRide(req, res);
+        yield start_1.appContext.services.RideService.cancelRide(req, res);
     });
 });
 exports.default = router;

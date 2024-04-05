@@ -55,7 +55,7 @@ export default class MileageService extends IService {
         headers: {
           Authorization: `Bearer ${config.paystack.secret_key}`,
         },
-        data: {...req.body,reference},
+        data: { ...req.body, reference, subaccount: config.paystack.subaccount.code },
       });
 
       return res.status(201).json(response.data);
@@ -63,10 +63,11 @@ export default class MileageService extends IService {
       return res.status(500).send(`error initializing payment: ${e}`);
     }
   }
-// Define a flag to track whether payment has been verified and mileage value created
 
 async verifyPayment(req, res) {
+  // Define a flag to track whether payment has been verified and mileage value created
   let paymentVerified = false;
+  
   await this.authenticate_rider(req.user._id);
 
   try {
@@ -85,7 +86,7 @@ async verifyPayment(req, res) {
 
     const { id: transactionId, reference, amount, status } = response.data.data;
 
-    if (status) {
+    if (status == "success") {
       let mileage = await this.models.Mileage.findOne({ rider: req.user._id });
 
       if (!mileage) {
@@ -100,6 +101,7 @@ async verifyPayment(req, res) {
         mileage = await this.models.Mileage.create(newMileageData);
       } else {
         mileage.value += await this.calculateMileage(amount);
+        mileage.reference = reference
         await mileage.save();
       }
 

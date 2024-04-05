@@ -128,34 +128,38 @@ export default class RiderService extends IService {
     }
   }
 
-  // login Rider
   async loginRider(req, res) {
-    const { phoneNumber, password } = req.body;
-    if (!phoneNumber || !password) {
-      res.status(500).send('missing required fields');
-    }
-
-    const Rider = await this.models.Rider.findOne({ phoneNumber });
-    if (!Rider) {
-      res.status(404).send('Rider not found');
-    }
-
     try {
-      const valid = await Rider.validatePassword(password);
-      if (!valid) {
-        res.status(500).send('password incorrect');
+      const { phoneNumber, password } = req.body;
+      if (!phoneNumber || !password) {
+        return res.status(400).json({ error: 'Missing required fields' });
       }
-    } catch (e) {
-      res.status(500).send('error logging in');
-    }
 
-    return Rider;
+      const rider = await this.models.Rider.findOne({ phoneNumber });
+      if (!rider) {
+        return res.status(404).json({ error: 'Rider not found' });
+      }
+
+      try {
+        const validPassword = await rider.validatePassword(password);
+        if (!(await validPassword)) {
+          return res.status(401).json({ error: 'Incorrect password' });
+        }
+      } catch (e) {
+        return res.status(500).json({ error: `Error validating password: ${e.message}` });
+      }
+
+      // If everything is successful, return the rider data as JSON response
+      return res.status(200).json(rider);
+    } catch (e) {
+      return res.status(500).json({ error: `Error logging in: ${e.message}` });
+    }
   }
 
   // updates Rider details
   async updateRider(req, res) {
     try {
-      console.log(req.user._id)
+      console.log(req.user._id);
       const Rider = await this.authenticate_rider(req.user._id);
 
       await Rider.updateOne({ $set: { ...req.body } });

@@ -55,7 +55,7 @@ class MileageService extends app_1.default {
                     headers: {
                         Authorization: `Bearer ${config_1.default.paystack.secret_key}`,
                     },
-                    data: Object.assign(Object.assign({}, req.body), { reference }),
+                    data: Object.assign(Object.assign({}, req.body), { reference, subaccount: config_1.default.paystack.subaccount.code }),
                 });
                 return res.status(201).json(response.data);
             }
@@ -64,9 +64,9 @@ class MileageService extends app_1.default {
             }
         });
     }
-    // Define a flag to track whether payment has been verified and mileage value created
     verifyPayment(req, res) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            // Define a flag to track whether payment has been verified and mileage value created
             let paymentVerified = false;
             yield this.authenticate_rider(req.user._id);
             try {
@@ -82,7 +82,7 @@ class MileageService extends app_1.default {
                     },
                 });
                 const { id: transactionId, reference, amount, status } = response.data.data;
-                if (status) {
+                if (status == "success") {
                     let mileage = yield this.models.Mileage.findOne({ rider: req.user._id });
                     if (!mileage) {
                         const newMileageData = {
@@ -97,6 +97,7 @@ class MileageService extends app_1.default {
                     }
                     else {
                         mileage.value += yield this.calculateMileage(amount);
+                        mileage.reference = reference;
                         yield mileage.save();
                     }
                     // Set paymentVerified flag to true after successful verification and mileage value creation

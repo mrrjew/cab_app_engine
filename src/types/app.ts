@@ -1,5 +1,7 @@
+import config from '../config';
 import { IModels } from '../models';
 import { IServices } from '../services';
+import axios from 'axios';
 export interface IAppContext {
   models?: IModels;
   services?: IServices;
