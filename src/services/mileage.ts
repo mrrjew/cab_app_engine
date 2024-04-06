@@ -5,6 +5,11 @@ import {v4} from "uuid"
 
 export default class MileageService extends IService {
   private endpoint = 'https://api.paystack.co';
+
+  // variable to prevent overincrementation of milleage 
+  private paymentInitialized = false 
+
+  //calculate mileage
   private async calculateMileage(amount) {
     return Number(+amount * (1 / 1.75));
   }
@@ -58,6 +63,8 @@ export default class MileageService extends IService {
         data: { ...req.body, reference, subaccount: config.paystack.subaccount.code },
       });
 
+      this.paymentInitialized = true
+      console.log(this.paymentInitialized)
       return res.status(201).json(response.data);
     } catch (e) {
       return res.status(500).send(`error initializing payment: ${e}`);
@@ -66,15 +73,10 @@ export default class MileageService extends IService {
 
 async verifyPayment(req, res) {
   // Define a flag to track whether payment has been verified and mileage value created
-  let paymentVerified = false;
   
   await this.authenticate_rider(req.user._id);
 
   try {
-    // Check if payment has already been verified
-    if (paymentVerified) {
-      return res.status(200).json({ message: 'Payment already verified' });
-    }
 
     const response = await axios({
       method: 'get',
@@ -86,7 +88,7 @@ async verifyPayment(req, res) {
 
     const { id: transactionId, reference, amount, status } = response.data.data;
 
-    if (status == "success") {
+    if (status == "success" && this.paymentInitialized) {
       let mileage = await this.models.Mileage.findOne({ rider: req.user._id });
 
       if (!mileage) {
@@ -104,11 +106,11 @@ async verifyPayment(req, res) {
         mileage.reference = reference
         await mileage.save();
       }
-
-      // Set paymentVerified flag to true after successful verification and mileage value creation
-      paymentVerified = true;
-
+      
+      this.paymentInitialized = false
+      console.log(this.paymentInitialized)
       return res.status(201).json(mileage);
+
     } else {
       return res.status(500).send('mileage purchase rejected');
     }

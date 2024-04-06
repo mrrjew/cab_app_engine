@@ -6,6 +6,7 @@ const app_1 = tslib_1.__importDefault(require("../types/app"));
 const config_1 = tslib_1.__importDefault(require("../config"));
 const uuid_1 = require("uuid");
 class MileageService extends app_1.default {
+    //calculate mileage
     calculateMileage(amount) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             return Number(+amount * (1 / 1.75));
@@ -14,6 +15,8 @@ class MileageService extends app_1.default {
     constructor(props) {
         super(props);
         this.endpoint = 'https://api.paystack.co';
+        // variable to prevent overincrementation of milleage 
+        this.paymentInitialized = false;
     }
     getUserCurrentMileage(req, res) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
@@ -57,6 +60,8 @@ class MileageService extends app_1.default {
                     },
                     data: Object.assign(Object.assign({}, req.body), { reference, subaccount: config_1.default.paystack.subaccount.code }),
                 });
+                this.paymentInitialized = true;
+                console.log(this.paymentInitialized);
                 return res.status(201).json(response.data);
             }
             catch (e) {
@@ -67,13 +72,8 @@ class MileageService extends app_1.default {
     verifyPayment(req, res) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
             // Define a flag to track whether payment has been verified and mileage value created
-            let paymentVerified = false;
             yield this.authenticate_rider(req.user._id);
             try {
-                // Check if payment has already been verified
-                if (paymentVerified) {
-                    return res.status(200).json({ message: 'Payment already verified' });
-                }
                 const response = yield (0, axios_1.default)({
                     method: 'get',
                     url: `${this.endpoint}/transaction/verify/${req.body.reference}`,
@@ -82,7 +82,7 @@ class MileageService extends app_1.default {
                     },
                 });
                 const { id: transactionId, reference, amount, status } = response.data.data;
-                if (status == "success") {
+                if (status == "success" && this.paymentInitialized) {
                     let mileage = yield this.models.Mileage.findOne({ rider: req.user._id });
                     if (!mileage) {
                         const newMileageData = {
@@ -100,8 +100,8 @@ class MileageService extends app_1.default {
                         mileage.reference = reference;
                         yield mileage.save();
                     }
-                    // Set paymentVerified flag to true after successful verification and mileage value creation
-                    paymentVerified = true;
+                    this.paymentInitialized = false;
+                    console.log(this.paymentInitialized);
                     return res.status(201).json(mileage);
                 }
                 else {
