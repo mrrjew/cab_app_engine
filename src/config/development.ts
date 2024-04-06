@@ -23,7 +23,7 @@ const config: Config = {
     level: process.env.LOGGER_LEVEL,
   },
   paystack: {
-    secret_key: process.env.PAYSTACK_TEST_SECRET_KEY || '',
+    secret_key: process.env.PAYSTACK_LIVE_SECRET_KEY || '',
     subaccount: {
       account_number: process.env.PAYSTACK_SUBACCOUNT_NUMBER || '',
       bank_code: process.env.PAYSTACK_BANK_CODE || '',

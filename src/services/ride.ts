@@ -125,7 +125,7 @@ export default class RideService extends IService {
         return res.status(404).json({ error: 'Ride not found' });
       }
 
-      return res.status(200).json({ message: 'Ride updated successfully', ride: updatedRide });
+      return res.status(200).json({ message: 'Ride updated successfully', ride: (await updatedRide) });
     } catch (error) {
       console.error('Error editing ride:', error);
       return res.status(500).json({ error: `Error editing ride: ${error.message}` });

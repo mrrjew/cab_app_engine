@@ -38,8 +38,7 @@ router.post('/reset-password', async(req: Request, res: Response) => {
 });
 
 router.post('/login', async(req: Request, res: Response) => {
-    const Rider = await appContext.services.RiderService.loginRider(req,res);
-    return res.status(200).json(Rider);
+    await appContext.services.RiderService.loginRider(req,res);
 });
 
 router.put('/update-rider', setContext, async(req: Request & { user: any }, res: Response) => {
