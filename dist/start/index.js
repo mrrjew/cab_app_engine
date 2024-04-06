@@ -5,7 +5,6 @@ const tslib_1 = require("tslib");
 const express_1 = tslib_1.__importDefault(require("express"));
 const cors_1 = tslib_1.__importDefault(require("cors"));
 const body_parser_1 = require("body-parser");
-const cookie_parser_1 = tslib_1.__importDefault(require("cookie-parser"));
 const multer_1 = tslib_1.__importDefault(require("multer"));
 const path_1 = tslib_1.__importDefault(require("path"));
 const models_1 = tslib_1.__importDefault(require("../models"));
@@ -32,8 +31,6 @@ function start(config) {
             exports.app.use(express_1.default.urlencoded({ extended: true }));
             // cors middleware
             exports.app.use((0, cors_1.default)(), (0, body_parser_1.json)());
-            // cookie middleware
-            exports.app.use((0, cookie_parser_1.default)());
             //server health check
             exports.app.use("/healthcheck", (_, res) => {
                 res.status(200).send("All is green!!!");

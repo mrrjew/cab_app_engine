@@ -5,7 +5,6 @@ import express, { Request } from "express";
 import { IAppContext } from "../types/app";
 import cors from "cors";
 import { json } from "body-parser";
-import cookieParser from "cookie-parser"
 import multer from 'multer'
 import path from 'path';
 import initDb from "../models";
@@ -43,9 +42,6 @@ export default async function start(config: Config) {
           cors<cors.CorsRequest>(),
           json(),
         );
-
-        // cookie middleware
-        app.use(cookieParser())
 
     //server health check
     app.use("/healthcheck", (_, res) => {
