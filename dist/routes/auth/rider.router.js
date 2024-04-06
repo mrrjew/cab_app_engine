@@ -32,8 +32,7 @@ router.post('/reset-password', (req, res) => tslib_1.__awaiter(void 0, void 0, v
     return res.status(200).json(response);
 }));
 router.post('/login', (req, res) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
-    const Rider = yield start_1.appContext.services.RiderService.loginRider(req, res);
-    return res.status(200).json(Rider);
+    yield start_1.appContext.services.RiderService.loginRider(req, res);
 }));
 router.put('/update-rider', context_1.default, (req, res) => tslib_1.__awaiter(void 0, void 0, void 0, function* () {
     const Rider = yield start_1.appContext.services.RiderService.updateRider(req, res);

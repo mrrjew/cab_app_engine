@@ -111,7 +111,7 @@ class RideService extends app_1.default {
                 if (!updatedRide) {
                     return res.status(404).json({ error: 'Ride not found' });
                 }
-                return res.status(200).json({ message: 'Ride updated successfully', ride: updatedRide });
+                return res.status(200).json({ message: 'Ride updated successfully', ride: (yield updatedRide) });
             }
             catch (error) {
                 console.error('Error editing ride:', error);

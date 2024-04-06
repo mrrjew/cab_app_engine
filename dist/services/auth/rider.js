@@ -113,32 +113,28 @@ class RiderService extends app_1.default {
             }
         });
     }
+    // login user
     loginRider(req, res) {
         return tslib_1.__awaiter(this, void 0, void 0, function* () {
+            const { phoneNumber, password } = req.body;
+            if (!phoneNumber || !password) {
+                return res.status(500).send('missing required fields');
+            }
+            const rider = yield this.models.Rider.findOne({ phoneNumber });
+            if (!rider) {
+                return res.status(404).send('user not found');
+            }
             try {
-                const { phoneNumber, password } = req.body;
-                if (!phoneNumber || !password) {
-                    return res.status(400).json({ error: 'Missing required fields' });
+                const valid = yield rider.validatePassword(password);
+                console.log(valid);
+                if (!valid) {
+                    return res.status(500).send('password incorrect');
                 }
-                const rider = yield this.models.Rider.findOne({ phoneNumber });
-                if (!rider) {
-                    return res.status(404).json({ error: 'Rider not found' });
-                }
-                try {
-                    const validPassword = yield rider.validatePassword(password);
-                    if (!(yield validPassword)) {
-                        return res.status(401).json({ error: 'Incorrect password' });
-                    }
-                }
-                catch (e) {
-                    return res.status(500).json({ error: `Error validating password: ${e.message}` });
-                }
-                // If everything is successful, return the rider data as JSON response
-                return res.status(200).json(rider);
             }
             catch (e) {
-                return res.status(500).json({ error: `Error logging in: ${e.message}` });
+                return res.status(500).send(`error logging in ${e}`);
             }
+            return res.status(200).json(rider);
         });
     }
     // updates Rider details
