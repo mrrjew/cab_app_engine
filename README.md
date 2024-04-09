@@ -57,31 +57,6 @@ Before running the CabApp Engine, make sure you have the following installed:
 
 `yarn install`
 
-2. Add the following environment variables to the .env file:
-
-```bash
-NODE_ENV=development
-PORT=8000
-DEV_MONGO_URI=
-TEST_MONGO_URI=
-PROD_MONGO_URI=
-TOKEN_EXPIRY=
-LOGGER_LEVEL=
-DEV_MAIL_USER=
-DEV_MAIL_PASS=
-DEV_MAIL_HOST=
-DEV_MAIL_PORT=
-DEV_MAIL_SECURE=
-
-MAIL_USER=
-MAIL_PASS=
-MAIL_HOST=
-MAIL_PORT=
-MAIL_SECURE=
-
-PAYSTACK_TEST_SECRET_KEY=
-```
-
 ## Usage
 
 To start the CabApp Engine, run the following command:
@@ -90,114 +65,9 @@ npm run dev
 
 The engine will start running on the specified port, and you can access the GraphQL endpoint in your browser at `http://localhost:8080`.
 
-## Routes
+## Documentation
+Visit `https://restless-astronaut-776620.postman.co/workspace/cabify~3ef51573-0f0d-4969-8e58-acadcc3b0c9c/collection/30840589-ddb788c5-a005-4cb3-9510-cfe0966bca23?action=share&creator=30840589` for documentation of api in postman
 
-**Base Url**
- ```bash 
-https://cab-app-engine.onrender.com/
-```
-**Authentication - SMS OTP**
- ```bash 
-/auth/register
-```
-This route registers a new user
-
-_request_
- ```bash 
-{
-  "phoneNumber":"233265865717"
-}
-```
-_response_
- ```bash 
-{
-  "user": {
-    "phoneNumber": "233265865717",
-    "verified": false,
-    "settings": {
-      "language": "EN",
-      "theme": "LIGHT",
-      "notificationEnabled": true,
-      "soundEnabled": true,
-      "autoSaveInterval": 10,
-      "profileVisibility": "PUBLIC",
-      "contactInfoVisibility": "PUBLIC",
-      "locationSharingEnabled": true,
-      "activityTrackingEnabled": true,
-      "dataSharingEnabled": true,
-      "dataRetentionPeriod": 365,
-      "twoFactorAuthEnabled": false,
-      "dataEncryptionEnabled": false
-    },
-    "_id": "6602df812ad5f9d765f57219",
-    "verificationCode": "6019",
-    "rating": [],
-    "createdAt": "2024-03-26T14:45:21.359Z",
-    "updatedAt": "2024-03-26T14:45:21.359Z",
-    "__v": 0
-  }
-}
-```
-
- ```bash 
-/auth/verify
-```
-This route verifies the new user
-
-_request_
- ```bash 
-{
-  "id":"6602d308ada621866a6c9ff3",
-  "verificationCode":"7648"
-}
-```
-
-return true or false
-
-
- ```bash 
-/auth/login
-```
-This route allows a user to login
-
-_request_
- ```bash 
-{
-  "phoneNumber":"233265865717",
-  "password":"password"
-}
-```
-
-_response_
-```bash
-{
-  "user": {
-    "phoneNumber": "233265865717",
-    "verified": false,
-    "settings": {
-      "language": "EN",
-      "theme": "LIGHT",
-      "notificationEnabled": true,
-      "soundEnabled": true,
-      "autoSaveInterval": 10,
-      "profileVisibility": "PUBLIC",
-      "contactInfoVisibility": "PUBLIC",
-      "locationSharingEnabled": true,
-      "activityTrackingEnabled": true,
-      "dataSharingEnabled": true,
-      "dataRetentionPeriod": 365,
-      "twoFactorAuthEnabled": false,
-      "dataEncryptionEnabled": false
-    },
-    "_id": "6602df812ad5f9d765f57219",
-    "verificationCode": "6019",
-    "rating": [],
-    "createdAt": "2024-03-26T14:45:21.359Z",
-    "updatedAt": "2024-03-26T14:45:21.359Z",
-    "__v": 0
-  }
-}
-```
 
 
 ## Contributing

@@ -1,10 +1,6 @@
 import { Model, Types, Document } from 'mongoose';
 
 
-export interface IUserProfile {
-  avatar:string
-  basicInformation: string;
-}
 export interface IUserProfileInput {
   avatar:string
   basicInformation: string;
@@ -33,7 +29,7 @@ export interface IUserSettings{
   notificationEnabled: boolean;
   soundEnabled: boolean;
   autoSaveInterval: number;
-
+  
   // Privacy Settings
   profileVisibility: 'PUBLIC' | 'PRIVATE';
   contactInfoVisibility: 'PUBLIC' | 'PRIVATE';
@@ -59,6 +55,10 @@ export interface IUserRating {
 
 
 // main user type
+  export interface IUserProfile {
+    avatar:string
+    basicInformation: string;
+  }
 export interface IUser {
   firstname?: string;
   lastname?: string;
